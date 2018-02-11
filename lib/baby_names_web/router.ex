@@ -20,7 +20,11 @@ defmodule BabyNamesWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", BabyNamesWeb do
-  #   pipe_through :api
-  # end
+  scope "/api/v1", BabyNamesWeb do
+    pipe_through :api
+
+    resources "/names", NameController, except: [:new, :edit]
+    resources "/comments", CommentController, except: [:new, :edit]
+  end
 end
+
