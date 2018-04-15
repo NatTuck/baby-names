@@ -7,6 +7,7 @@ defmodule BabyNames.Baby do
   alias BabyNames.Repo
 
   alias BabyNames.Baby.Name
+  alias BabyNames.Baby.Comment
 
   @doc """
   Returns the list of names.
@@ -19,6 +20,15 @@ defmodule BabyNames.Baby do
   """
   def list_names do
     Repo.all(Name)
+  end
+
+  def search(query) do
+    qq = "%#{query}%"
+    Repo.all from n in Name,
+      where: ilike(n.name, ^qq),
+      limit: 100,
+      preload: :years,
+      order_by: [asc: n.krat, asc: n.nrat, asc: n.best_rank]
   end
 
   @doc """
@@ -36,6 +46,8 @@ defmodule BabyNames.Baby do
 
   """
   def get_name!(id), do: Repo.get!(Name, id)
+
+  def get_name_by_name!(name), do: Repo.get_by!(Name, name: name)
 
   @doc """
   Creates a name.
@@ -73,6 +85,14 @@ defmodule BabyNames.Baby do
     |> Repo.update()
   end
 
+  alias BabyNames.Baby.YearName
+
+  def update_year_name(%YearName{} = name, attrs) do
+    name
+    |> YearName.changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Deletes a Name.
 
@@ -102,7 +122,6 @@ defmodule BabyNames.Baby do
     Name.changeset(name, %{})
   end
 
-  alias BabyNames.Baby.Comment
 
   @doc """
   Returns the list of comments.

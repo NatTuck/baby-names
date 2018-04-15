@@ -3,6 +3,7 @@ defmodule BabyNamesWeb.UserSocket do
 
   ## Channels
   # channel "room:*", BabyNamesWeb.RoomChannel
+  channel "names:*", BabyNamesWeb.NamesChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
